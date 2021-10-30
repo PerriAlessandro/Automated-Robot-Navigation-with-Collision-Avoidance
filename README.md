@@ -288,7 +288,7 @@ The first thing to do is to initialize the variables that set the threshold valu
 a_th_svr=1.4 #linear distance threshold of silver token
 d_th_svr=70 #orientation threshold of silver token
 ```
-After that, there is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `navigation_logic()` function:
+After that, there is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `navigation_logic()` one:
 ```python
 a_th_svr=1.4 #linear distance threshold of silver token
 d_th_svr=70 #orientation threshold of silver token
@@ -305,7 +305,24 @@ while 1:
 		navigation_logic(mean_l,mean_r,distance) #When the previous condition doesn't happen, just move on
 ```
 
+In order to have a more intuitive idea of what I just explained, I created a simple __flowchart__ concerning the logic of my entire Python code:
 
+![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/RT_1Ass_flowchart.png)
+
+In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program.
+
+Results
+----------------------
+
+### Overall work ###
+Overall, I'm genuinely satisfied with the work I've done because it allowed me to learn a lot about Python programming and, regarding to the concepts in this kind of work, I started to learn something about the logic with which a robot has to decide to move itself in a 2D environment. I have worked both on my own and with some of my classmates and it's been fun collaborating in order to find a smart solution to the task requested.
+
+I spent most of the time on the first part of the project because at a first sight I didn't know which could be the best way to make the robot take a decision. The first code I implemented was based on letting the robot avoid golden tokens by just checking the angle between them and the robot, but I had noticed that it couldn't have worked in a deterministic way because there were some moments in which the robot decided to turn on the wrong way and eventually go back instead of going on. Things started working better when I decided to base the main logic on comparing the distances between right and left tokens. 
+Here's a short video of the final result:
+
+
+### Possible improvements ###
+During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more complex one but with more lines of code. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time.
 
 
 
