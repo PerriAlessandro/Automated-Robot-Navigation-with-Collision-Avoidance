@@ -96,8 +96,15 @@ $ python2 run.py assignment.py
 where __assignment.py__  is the Python code that I implemented in order to complete the assigned task and that will be described in the following paragraphs.
 
 This assignment aimed to make the robot move inside a maze made out of golden boxes. In the path, the robot will come into contact with some silver boxes, with which it will have to grab and put them behind itself (with a 180 degrees rotation), finally turn back to the initial position and keep going on. Here's a short clip of the desired behavior I just described.
+<p align="center">
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/grab_token_gif.gif" height=320 width=256>
+</p>
 
-The hardest part of the assignment was to implement a logic with which the robot should be able to detect the walls made out of golden boxes and to avoid them by simply turning left or right, depending on the information about the distance and the orientation of the golden tokens close to it.
+The hardest part of the assignment was to implement a logic with which the robot should be able to detect the walls made out of golden boxes and to avoid them by simply turning left or right, depending on the information about the distance and the orientation of the golden tokens close to it. As it'll be described better in the next paragraphs, my code is mainly based on the comparison between left and right golden token distances. In such a way, the robot will properly turn in the right direction, here's a GIF that shows the desired behavior:
+<p align="center">
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/corner_gif.gif" height=234 width=600>
+</p>
+
 
 Functions 
 ----------------------
@@ -258,7 +265,7 @@ Function that implements the logic with which the robot will decide to navigate 
 - Code
 ```python
 def navigation_logic(mean_l,mean_r,front_d):
- a_th_gld=1.2 #linear distance threshold of golden token
+        a_th_gld=1.2 #linear distance threshold of golden token
 	if(front_d<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
 		if(mean_l<=mean_r): #checks if the distance of the left golden token is lower than the one of the right token 
 			if(1.5*mean_l<mean_r): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
@@ -283,11 +290,16 @@ def navigation_logic(mean_l,mean_r,front_d):
 main () function 
 ----------------------
 The `main()` function is pretty simple and synthetic.
-The first thing to do is to initialize the variables that set the threshold values of linear distance and orientation for the silver tokens:
+The first thing to do is define the variables that set the threshold values of linear distance and orientation for the silver tokens (the linear distance threshold for frontal golden token, __a_th_gld__, is already defined in `navigation_logic()` function):
 ```python
 a_th_svr=1.4 #linear distance threshold of silver token
 d_th_svr=70 #orientation threshold of silver token
 ```
+The robot will have this kind of field of view:
+<p align="center">
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/thresholds.jpg" height=465 width=640>
+</p>
+
 After that, there is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `navigation_logic()` one:
 ```python
 a_th_svr=1.4 #linear distance threshold of silver token
@@ -315,15 +327,15 @@ Results
 ----------------------
 
 ### Overall work ###
-Overall, I'm genuinely satisfied with the work I've done because it allowed me to learn a lot about Python programming and, regarding to the concepts in this kind of work, I started to learn something about the logic with which a robot has to decide to move itself in a 2D environment. I have worked both on my own and with some of my classmates and it's been fun collaborating in order to find a smart solution to the task requested.
+Overall, I'm genuinely satisfied with the work I've done because it allowed me to learn a lot about Python programming and, regarding to the concepts that are in this kind of work, I started to learn something about the logic with which a robot has to decide to move itself in a 2D environment. I have worked both on my own and with some of my classmates and it's been fun collaborating in order to find a smart solution to the task requested.
 
 I spent most of the time on the first part of the project because at a first sight I didn't know which could be the best way to make the robot take a decision. The first code I implemented was based on letting the robot avoid golden tokens by just checking the angle between them and the robot, but I had noticed that it couldn't have worked in a deterministic way because there were some moments in which the robot decided to turn on the wrong way and eventually go back instead of going on. Things started working better when I decided to base the main logic on comparing the distances between right and left tokens. 
 Here's a short video of the final result:
+https://github.com/PerriAlessandro/Assignment1/blob/main/full_lap.mp4
 
 
 ### Possible improvements ###
-During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more complex one but with more lines of code. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time.
-
+During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more complex one but with more lines of code. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time. This is actually quite simple to implement, but I decided against it because I took as my priority the ability to allow the robot to move through the maze regardless of the presence of silver tokens.
 
 
 
