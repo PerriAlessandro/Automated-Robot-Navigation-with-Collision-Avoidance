@@ -198,7 +198,9 @@ This function permits you to move forward to the closest silver token and grab i
 - Returns
   - None
 - Flowchart
-Here's a flowchart that illustrates the way of how `grab_silver()` works:
+  
+  Here's a flowchart that illustrates the way of how `grab_silver()` works:
+  
 ![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/grab_silver_flowchart.png)
 - Code
 ```python
