@@ -1,10 +1,10 @@
-Python Robotics Simulator
+ Research Track 1  -  First assignment <img src="https://raw.githubusercontent.com/jmnote/z-icons/master/svg/python.svg" width="30" height="30">
 ================================
 
-This is a simple, portable robot simulator developed by [Student Robotics](https://studentrobotics.org).
-Some of the arenas and the exercises have been modified for the Research Track I course
+This assignment is based on a simple, portable robot simulator developed by [Student Robotics](https://studentrobotics.org).
 
-Installing and running
+
+Installing and running the simulator
 ----------------------
 
 The simulator requires a Python 2.7 installation, the [pygame](http://pygame.org/) library, [PyPyBox2D](https://pypi.python.org/pypi/pypybox2d/2.1-r331), and [PyYAML](https://pypi.python.org/pypi/PyYAML/).
@@ -87,7 +87,7 @@ for m in markers:
 
 
 
-How to run and aim of the project 
+How to run and aim of the assignment
 ----------------------
 It is possible to start the program by simply running the command:
 ```bash
@@ -95,7 +95,13 @@ $ python2 run.py assignment.py
 ```
 where __assignment.py__  is the Python code that I implemented in order to complete the assigned task and that will be described in the following paragraphs.
 
-This assignment aimed to make the robot move inside a maze made out of golden boxes. In the path, the robot will come into contact with some silver boxes, with which it will have to grab and put them behind itself (with a 180 degrees rotation), finally turn back to the initial position and keep going on. Here's a short clip of the desired behavior I just described.
+This assignment aimed to make the robot move inside a maze made out of golden boxes. In the path, the robot will come into contact with some silver boxes, with which it will have to:
+- grab the token
+- put it behind itself (with a 180 degrees rotation)
+- Turn back to the initial position (with the same rotation but negative)
+- keep going on. 
+
+Here's a short clip of the desired behavior I just described.
 <p align="center">
 	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/grab_token_gif.gif" height=320 width=256>
 </p>
@@ -330,7 +336,7 @@ Results
 Overall, I'm genuinely satisfied with the work I've done because it allowed me to learn a lot about Python programming and, regarding to the concepts that are in this kind of work, I started to learn something about the logic with which a robot has to decide to move itself in a 2D environment. I have worked both on my own and with some of my classmates and it's been fun collaborating in order to find a smart solution to the task requested.
 
 I spent most of the time on the first part of the project because at a first sight I didn't know which could be the best way to make the robot take a decision. The first code I implemented was based on letting the robot avoid golden tokens by just checking the angle between them and the robot, but I had noticed that it couldn't have worked in a deterministic way because there were some moments in which the robot decided to turn on the wrong way and eventually go back instead of going on. Things started working better when I decided to base the main logic on comparing the distances between right and left tokens. 
-Here's a short video of the final result:
+Here's a short video of the final result (sped up to 2x):
 https://github.com/PerriAlessandro/Assignment1/blob/main/full_lap.mp4
 
 
