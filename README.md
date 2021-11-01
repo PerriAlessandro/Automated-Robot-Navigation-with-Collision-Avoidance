@@ -7,13 +7,13 @@ This assignment is based on a simple, portable robot simulator developed by [Stu
 Aim of the project
 ----------------------
 The project aimed to write a Python script in which we had to manage the behaviour of the robot using this kind of logic:
-- constrantly drive the robot around the circuit in the counter-clockwise direction
+- constantly drive the robot around the circuit in the counter-clockwise direction
 - avoid touching the golden boxes
 - when the robot is close to a silver box, it should:
 	- grab the token
 	- put it behind itself (with a 180 degrees rotation)
-	- Turn back to the initial position (with the same rotation but negative)
-	- keep going on. 
+	- Turn back to the initial position (with the same orientation but negative)
+- keep driving the robot around. 
 
 
 
@@ -172,14 +172,15 @@ This function permits to get information about the distance and the angle betwee
 ```python
 def find_silver_token():
    dist = 100
-   for token in R.see():
-       if token.dist < dist and token.info.marker_type is MARKER_TOKEN_SILVER:
-           dist = token.dist
-    rot_y = token.rot_y
-   if dist == 100:
-    return -1, -1
-   else:
-    return dist, rot_y
+    for token in R.see():
+        if token.dist < dist and token.info.marker_type is MARKER_TOKEN_SILVER:
+            dist = token.dist
+	    rot_y = token.rot_y
+    if dist == 100:
+    	return -1, -1
+    else:
+    	return dist, rot_y
+
 ```
 
 ### grab_silver() ###
@@ -200,11 +201,12 @@ def grab_silver():
 			turn(+10, 1)
 	    	elif dist < d_th:  # if we are close to the token, we try grab it.
 			print("Found it!")
-			if R.grab():  # if we grab the token, we move the robot forward and on the right, we release the token, and we go back to the initial position
+			grab=R.grab()
+			if grab:  # if we grab the token, we move the robot forward and on the right, we release the token, and we go back to the initial position
 			    print("Gotcha!")
-		    	    turn(37, 2.5) #turn (+180 degrees)
+		    	    turn(23, 3) #turn (+180 degrees)
 			    R.release()
-			    turn(-37, 2.5) #turn (-180 degrees)
+			    turn(-23, 3) #turn (-180 degrees)
 			    finished = True
 
 			else:
@@ -219,6 +221,7 @@ def grab_silver():
 	    	elif rot_y > a_th:
 		    print("Right a bit...")
 		    turn(+2, 0.5)
+
 ```
 
 ### find_frontal_token() ###
@@ -246,52 +249,54 @@ Function to find the mean of the distances of the two closest golden token on th
 - Arguments 
   - `range` _(float[])_, list of the two positive angles in which the robot will search for, _default_:[80,100]
 - Returns
-  - `mean_l` _(float)_: mean distance of the two closest golden token on the left
-  - `mean_r` _(float)_: mean distance of the two closest golden token on the right
+  - `dist_left` _(float)_: mean distance of the two closest golden token on the left
+  - `dist_right` _(float)_: mean distance of the two closest golden token on the right
 - Code
 ```python
 def find_lateral_token(range=[80,100]):    
-	dist_l_1 = dist_l_2 = dist_r_1 =dist_r_2= 100
-
+	dist_l1 = dist_l2 = dist_r1 =dist_r2= 100
 	for token in R.see():
 		if(token.info.marker_type is MARKER_TOKEN_GOLD and token.dist < 2.5):
-			if token.dist < dist_l_1 and -range[1] < token.rot_y < -range[0] :
-			    dist_l_1 = token.dist
-			    dist_l_2 = dist_l_1
-			if token.dist < dist_r_1 and range[0] < token.rot_y < range[1] :
-			    dist_r_1 = token.dist
-			    dist_r_2 = dist_r_1
-	mean_l = np.mean((dist_l_1, dist_l_2))  #mean of the two closest left token distances, mean() function from Numpy library
-	mean_r = np.mean((dist_r_1, dist_r_2))  #mean of the two closest right token distances
+			if token.dist < dist_l1 and -range[1] < token.rot_y < -range[0] :
+			    dist_l1 = token.dist
+			    dist_l2 = dist_l1
+			if token.dist < dist_r1 and range[0] < token.rot_y < range[1] :
+			    dist_r1 = token.dist
+			    dist_r2 = dist_r1
+	dist_left = np.mean((dist_l1, dist_l2))  #mean of the distances already explained before, mean() function from Numpy library
+	dist_right = np.mean((dist_r1, dist_r2))
 
-	return mean_l,mean_r
+	return dist_left,dist_right
+
 ```
 
-### navigation_logic() ###
+### drive_around() ###
 Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
 	find_lateral_token() functions. This function is called whenever the conditions for grabbing a silver token (specified in the main()) are not respected.
 - Arguments 
-  - `mean_l` _(float)_: mean distance of the two closest golden token on the left
-  - `mean_r` _(float)_: mean distance of the two closest golden token on the right
-  - `front_d` _(float)_: distance of the closest golden token in the frontal portion of plane(-1 if no golden token is detected)
+  - `dist_left` _(float)_: mean distance of the two closest golden token on the left
+  - `dist_right` _(float)_: mean distance of the two closest golden token on the right
+  - `dist_front` _(float)_: distance of the closest golden token in the frontal portion of plane(-1 if no golden token is detected)
   
 - Returns
   - None
 - Code
 ```python
-def navigation_logic(mean_l,mean_r,front_d):
+def drive_around(dist_left,dist_right,dist_front):
         a_th_gld=1.2 #linear distance threshold of golden token
-	if(front_d<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
-		if(mean_l<=mean_r): #checks if the distance of the left golden token is lower than the one of the right token 
-			if(1.5*mean_l<mean_r): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
+	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
+		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
+			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
 		    		turn(45,0.1)	
-		    		print("right a bit because left= "+str(mean_l)+" and right= "+str(mean_r)) 		
+		    		print("right a bit...")
+		    		#print("right a bit because left= "+str(mean_l)+" and right= "+str(mean_r)) 		
 			else:	 		#the two lateral distances are too similar, better to go forward while turning
 		    		drive(20,0.1)
 				turn(20,0.1)
 				print("slightly turn to the right...")	
-		elif(1.5*mean_r<mean_l): #if the cycle arrives here, it means that mean_r<mean_l
-		    	print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
+		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that mean_r<mean_l
+		    	print("left a bit...")
+		    	#print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
 		   	turn(-45,0.1)
 		else:
 			drive(20,0.1)
@@ -299,13 +304,13 @@ def navigation_logic(mean_l,mean_r,front_d):
 			print("slightly turn to the left...")		  	
 	else:				#if none of the previous conditions occured, then go forward
 		drive(80,0.15)
-		print("going forward...")   
+		print("going forward...")    
 ```
 
 main () function 
 ----------------------
 The `main()` function is pretty simple and synthetic.
-The first thing to do is define the variables that set the threshold values of linear distance and orientation for the silver tokens (the linear distance threshold for frontal golden token, __a_th_gld__, is already defined in `navigation_logic()` function):
+The first thing to do is define the variables that set the threshold values of linear distance and orientation for the silver tokens (the linear distance threshold for frontal golden token, __a_th_gld__, is already defined in `drive_around()` function):
 ```python
 a_th_svr=1.4 #linear distance threshold of silver token
 d_th_svr=70 #orientation threshold of silver token
@@ -315,21 +320,24 @@ The robot will have this kind of field of view:
 	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/thresholds.jpg" height=465 width=640>
 </p>
 
-After that, there is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `navigation_logic()` one:
+After that, there is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `drive_around()` one:
 ```python
-a_th_svr=1.4 #linear distance threshold of silver token
-d_th_svr=70 #orientation threshold of silver token
-while 1:
-	#Updating information about the gold and silver tokens in the specified areas of the robot view
-	dist, rot_y = find_silver_token()
-	distance= find_frontal_token()
-	mean_l,mean_r= find_lateral_token()
-	
-	#If the distance of the silver token (dist) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
-	if(dist<a_th_svr and dist!=-1 and rot_y>-d_th_svr and rot_y<d_th_svr):
-		grab_silver()	
-	else:
-		navigation_logic(mean_l,mean_r,distance) #When the previous condition doesn't happen, just move on
+def main():
+	a_th_svr=1.4 #linear distance threshold of silver token
+	d_th_svr=70 #orientation threshold of silver token
+
+	while 1:
+		
+		#Updating information about the gold and silver tokens in the specified areas of the robot view (i.e. frontal and lateral for golden tokens, frontal for silver tokens)
+		dist_svr, rot_y_svr= find_silver_token()
+		dist_front_gld= find_frontal_token()
+		dist_left_gld,dist_right_gld= find_lateral_token()
+		
+		#If the distance of the silver token (dist) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
+		if(dist_svr<a_th_svr and dist_svr!=-1 and rot_y_svr>-d_th_svr and rot_y_svr<d_th_svr):
+			grab_silver()	
+		else:
+			drive_around(dist_left_gld,dist_right_gld,dist_front_gld) #If the silver token is too far, then drive around!
 ```
 
 In order to have a more intuitive idea of what I just explained, I created a simple __flowchart__ concerning the logic of my entire Python code:
