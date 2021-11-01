@@ -4,6 +4,30 @@
 This assignment is based on a simple, portable robot simulator developed by [Student Robotics](https://studentrobotics.org).
 
 
+Aim of the project
+----------------------
+The project aimed to write a Python script in which we had to manage the behaviour of the robot using this kind of logic:
+- constrantly drive the robot around the circuit in the counter-clockwise direction
+- avoid touching the golden boxes
+- when the robot is close to a silver box, it should:
+	- grab the token
+	- put it behind itself (with a 180 degrees rotation)
+	- Turn back to the initial position (with the same rotation but negative)
+	- keep going on. 
+
+
+
+Here's a short clip of the desired behavior I just described.
+<p align="center">
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/grab_token_gif.gif" height=320 width=256>
+</p>
+
+The hardest part of the assignment was to implement a logic with which the robot should be able to detect the walls made out of golden boxes and to avoid them by simply turning left or right, depending on the information about the distance and the orientation of the golden tokens close to it. As it'll be described better in the next paragraphs, my code is mainly based on the comparison between left and right golden token distances. In such a way, the robot will properly turn in the right direction, here's a GIF that shows the desired behavior:
+<p align="center">
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/corner_gif.gif" height=234 width=600>
+</p>
+
+
 Installing and running the simulator
 ----------------------
 
@@ -95,21 +119,6 @@ $ python2 run.py assignment.py
 ```
 where __assignment.py__  is the Python code that I implemented in order to complete the assigned task and that will be described in the following paragraphs.
 
-This assignment aimed to make the robot move inside a maze made out of golden boxes. In the path, the robot will come into contact with some silver boxes, with which it will have to:
-- grab the token
-- put it behind itself (with a 180 degrees rotation)
-- Turn back to the initial position (with the same rotation but negative)
-- keep going on. 
-
-Here's a short clip of the desired behavior I just described.
-<p align="center">
-	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/grab_token_gif.gif" height=320 width=256>
-</p>
-
-The hardest part of the assignment was to implement a logic with which the robot should be able to detect the walls made out of golden boxes and to avoid them by simply turning left or right, depending on the information about the distance and the orientation of the golden tokens close to it. As it'll be described better in the next paragraphs, my code is mainly based on the comparison between left and right golden token distances. In such a way, the robot will properly turn in the right direction, here's a GIF that shows the desired behavior:
-<p align="center">
-	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/corner_gif.gif" height=234 width=600>
-</p>
 
 
 Functions 
