@@ -357,7 +357,7 @@ In order to have a more intuitive idea of what I just explained, I created a sim
 
 ![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/main_flowchart.png)
 
-In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program. You can also find the flowchart for the `grab_silver()` function [here](https://github.com/PerriAlessandro/Assignment1/blob/main/main_flowchart.png).
+In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program. You can also find the flowchart for the `grab_silver()` function [here](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_silver).
 
 Results
 ----------------------
