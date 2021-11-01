@@ -126,11 +126,11 @@ Functions
 Here's a list of all the functions in __assignment.py__ code:
 - [drive(speed,seconds)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#drive)
 - [turn(speed,seconds)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turn)
-- [find_silver_token()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turn)
-- [grab_silver()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turn)
-- [find_frontal_token(range)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turn)
-- [find_lateral_token(range)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turn)
-- [drive_around(dist_left,dist_right,dist_front)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turn)
+- [find_silver_token()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_silver_token)
+- [grab_silver()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_silver)
+- [find_frontal_token(range)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_frontal_token)
+- [find_lateral_token(range)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_lateral_token)
+- [drive_around(dist_left,dist_right,dist_front)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#drive_around)
 
 
 
