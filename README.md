@@ -134,7 +134,7 @@ Here's a list of all the functions in __assignment.py__ code:
 
 
 
-### drive() ###
+### drive(speed,seconds) ###
 This function sets the linear velocity of the robot. The parameters are the speed and the time with which the robot has to drive forward.
 - Arguments 
   - `speed` _(float)_, the amount of linear velocity that we want our robot to assume.
@@ -151,7 +151,7 @@ def drive(speed, seconds):
     R.motors[0].m1.power = 0
 ```
 
-### turn() ###
+### turn(speed,seconds) ###
 This function permits the robot to turn on itself, therefore there is no linear velocity but only an angular one.
 - Arguments 
   - `speed` (float), the amount of angular velocity that we want our robot to assume.
@@ -232,7 +232,7 @@ def grab_silver():
 
 ```
 
-### find_frontal_token() ###
+### find_frontal_token(range) ###
 Function to find the closest golden token in a angle between the specified range(i.e. the frontal portion of the robot view)
 - Arguments 
   - `range` _(float)_, positive range in which we want to find the token, _default_: 30 
@@ -252,7 +252,7 @@ def find_frontal_token(range=30):
     else:
    	 return dist
 ```
-### find_lateral_token() ###
+### find_lateral_token(range) ###
 Function to find the mean of the distances of the two closest golden token on the left and the right portions of the robot view
 - Arguments 
   - `range` _(float[])_, list of the two positive angles in which the robot will search for, _default_:[80,100]
@@ -278,7 +278,7 @@ def find_lateral_token(range=[80,100]):
 
 ```
 
-### drive_around() ###
+### drive_around(dist_left,dist_right;dist_front) ###
 Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
 	find_lateral_token() functions. This function is called whenever the conditions for grabbing a silver token (specified in the main()) are not respected.
 - Arguments 
