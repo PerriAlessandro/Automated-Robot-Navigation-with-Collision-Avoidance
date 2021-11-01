@@ -197,6 +197,9 @@ This function permits you to move forward to the closest silver token and grab i
   - None
 - Returns
   - None
+- Flowchart
+Here's a flowchart that illustrates the way of how `grab_silver()` works:
+![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/grab_silver_flowchart.png)
 - Code
 ```python
 def grab_silver():
@@ -278,7 +281,7 @@ def find_lateral_token(range=[80,100]):
 
 ```
 
-### drive_around(dist_left,dist_right;dist_front) ###
+### drive_around(dist_left, dist_right, dist_front) ###
 Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
 	find_lateral_token() functions. This function is called whenever the conditions for grabbing a silver token (specified in the main()) are not respected.
 - Arguments 
@@ -350,9 +353,9 @@ def main():
 
 In order to have a more intuitive idea of what I just explained, I created a simple __flowchart__ concerning the logic of my entire Python code:
 
-![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/RT_1Ass_flowchart.png)
+![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/main_flowchart.png)
 
-In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program.
+In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program. You can also find the flowchart for the `grab_silver()` function [here](https://github.com/PerriAlessandro/Assignment1/blob/main/main_flowchart.png).
 
 Results
 ----------------------
