@@ -111,7 +111,7 @@ for m in markers:
 
 
 
-How to run and aim of the assignment
+How to run
 ----------------------
 It is possible to start the program by simply running the command:
 ```bash
