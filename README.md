@@ -119,9 +119,15 @@ $ python2 run.py assignment.py
 ```
 where __assignment.py__  is the Python code that I implemented in order to complete the assigned task and that will be described in the following paragraphs.
 
+Imported libraries
+----------------------
+The Python libraries needed are:
+- [print_function](https://www.python.org/dev/peps/pep-3105/) (from __future__)
+- [time](https://docs.python.org/3/library/time.html?highlight=time#module-time)
+- [sr.robot](https://studentrobotics.org/docs/programming/sr/)
 
 
-Functions 
+Functions
 ----------------------
 Here's a list of all the functions in __assignment.py__ code:
 - [drive(speed,seconds)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#drivespeedseconds)
@@ -239,72 +245,76 @@ def grab_silver():
 
 ```
 
-### find_frontal_token(range) ###
-Function to find the closest golden token in a angle between the specified range(i.e. the frontal portion of the robot view)
-- Arguments 
-  - `range` _(float)_, positive range in which we want to find the token, _default_: 30 
-- Returns
-  - `dist` _(float)_: distance of the closest golden token in the specified range(-1 if no golden token is detected)
-- Code
-```python
-def find_frontal_token(range=30): 
-    dist =100
-    rot_y = -100   
-    for token in R.see():
-        if token.dist < dist and token.info.marker_type is MARKER_TOKEN_GOLD and -range < token.rot_y < +range:
-            dist = token.dist
-	    rot_y = token.rot_y
-    if dist == 100:
-     return -1
-    else:
-   	 return dist
-```
-### find_lateral_token(range) ###
+
+### find_obstacles(range_front, range_lat) ###
 Function to find the mean of the distances of the two closest golden token on the left and the right portions of the robot view
 - Arguments 
-  - `range` _(float[])_, list of the two positive angles in which the robot will search for, _default_:[80,100]
+  - `range_front` (float): positive range in which we want to find the frontal token, default: 30 degrees
+  - `range_lat` _(float[])_, list of the two positive angles (that correspond to the lateral areas) in which the robot will search for, default: [80,100] degrees
 - Returns
-  - `dist_left` _(float)_: mean distance of the two closest golden token on the left
-  - `dist_right` _(float)_: mean distance of the two closest golden token on the right
+  - `dist_front` _(float)_: distance of the closest golden token on the front
+  - `dist_left` _(float)_: distance of the two closest golden token on the left
+  - `dist_right` _(float)_: distance of the two closest golden token on the right
+- Robot's Field of View
+
+The robot will have this kind of field of view:
+<p align="center">
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/thresholds.jpg" height=465 width=640>
+</p>
+
+	
 - Code
 ```python
-def find_lateral_token(range=[80,100]):    
-	dist_l1 = dist_l2 = dist_r1 =dist_r2= 100
+def find_obstacles(range_front=30,range_lat=[80,100]):
+    
+	dist_left=dist_right=dist_front= 100
+
 	for token in R.see():
 		if(token.info.marker_type is MARKER_TOKEN_GOLD and token.dist < 2.5):
-			if token.dist < dist_l1 and -range[1] < token.rot_y < -range[0] :
-			    dist_l1 = token.dist
-			    dist_l2 = dist_l1
-			if token.dist < dist_r1 and range[0] < token.rot_y < range[1] :
-			    dist_r1 = token.dist
-			    dist_r2 = dist_r1
-	dist_left = np.mean((dist_l1, dist_l2))  #mean of the distances already explained before, mean() function from Numpy library
-	dist_right = np.mean((dist_r1, dist_r2))
-
-	return dist_left,dist_right
+		
+			if token.dist < dist_front and -range_front < token.rot_y < +range_front:
+			    dist_front=token.dist
+			if token.dist < dist_left and -range_lat[1] < token.rot_y < -range_lat[0] :
+			    dist_left = token.dist
+			 
+			if token.dist < dist_right and range_lat[0] < token.rot_y < range_lat[1] :
+			    dist_right = token.dist
+			
+			
+	return dist_front,dist_left,dist_right
 
 ```
 
-### drive_around(dist_left, dist_right, dist_front) ###
+### drive_around(dist_front,dist_left, dist_right) ###
 Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
 	find_lateral_token() functions. This function is called whenever the conditions for grabbing a silver token (specified in the main()) are not respected.
 - Arguments 
-  - `dist_left` _(float)_: mean distance of the two closest golden token on the left
-  - `dist_right` _(float)_: mean distance of the two closest golden token on the right
-  - `dist_front` _(float)_: distance of the closest golden token in the frontal portion of plane(-1 if no golden token is detected)
+  - `dist_front` _(float)_: distance of the closest golden token on the front
+  - `dist_left` _(float)_: distance of the closest golden token on the left
+  - `dist_right` _(float)_: distance of the closest golden token on the right
+
   
 - Returns
   - None
 - Code
 ```python
-def drive_around(dist_left,dist_right,dist_front):
-        a_th_gld=1.2 #linear distance threshold of golden token
+def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
+
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
+		
+		"""
+		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
+			turn(20,0.1)
+			print("right a bit...")	
+		
+		else: #if the cycle arrives here, it means that dist_right<dist_left
+		    	print("left a bit...")
+		   	turn(-45,0.1)
+		"""
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
 			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
 		    		turn(45,0.1)	
-		    		print("right a bit...")
-		    		#print("right a bit because left= "+str(mean_l)+" and right= "+str(mean_r)) 		
+		    		print("right a bit...")	
 			else:	 		#the two lateral distances are too similar, better to go forward while turning
 		    		drive(20,0.1)
 				turn(20,0.1)
@@ -316,43 +326,33 @@ def drive_around(dist_left,dist_right,dist_front):
 		else:
 			drive(20,0.1)
 			turn(-35,0.1)
-			print("slightly turn to the left...")		  	
+			print("slightly turn to the left...")	
 	else:				#if none of the previous conditions occured, then go forward
 		drive(80,0.15)
-		print("going forward...")    
+		print("going forward...")   	
+	  	  	 
 ```
 
 main () function 
 ----------------------
 The `main()` function is pretty simple and synthetic.
-The first thing to do is define the variables that set the threshold values of linear distance and orientation for the silver tokens (the linear distance threshold for frontal golden token, __a_th_gld__, is already defined in `drive_around()` function):
-```python
-a_th_svr=1.4 #linear distance threshold of silver token
-d_th_svr=70 #orientation threshold of silver token
-```
-The robot will have this kind of field of view:
-<p align="center">
-	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/thresholds.jpg" height=465 width=640>
-</p>
 
-After that, there is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `drive_around()` one:
+There is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `drive_around()` one. The _if statement_ checks if the distance of the silver token (dist svr) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr). The robot will only see the silver tokens that are in the blue portion of the plane illustrated [here (Robot's Field of view section)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_obstacles).
 ```python
 def main():
-	a_th_svr=1.4 #linear distance threshold of silver token
-	d_th_svr=70 #orientation threshold of silver token
-
+		
 	while 1:
 		
 		#Updating information about the gold and silver tokens in the specified areas of the robot view (i.e. frontal and lateral for golden tokens, frontal for silver tokens)
 		dist_svr, rot_y_svr= find_silver_token()
-		dist_front_gld= find_frontal_token()
-		dist_left_gld,dist_right_gld= find_lateral_token()
+		dist_front_gld,dist_left_gld,dist_right_gld= find_obstacles()
 		
-		#If the distance of the silver token (dist) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
+		#If the distance of the silver token (dist_svr) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
 		if(dist_svr<a_th_svr and dist_svr!=-1 and rot_y_svr>-d_th_svr and rot_y_svr<d_th_svr):
 			grab_silver()	
 		else:
-			drive_around(dist_left_gld,dist_right_gld,dist_front_gld) #If the silver token is too far, then drive around!
+			drive_around(dist_front_gld,dist_left_gld,dist_right_gld) #If the silver token is too far, then drive around!
+		
 ```
 
 In order to have a more intuitive idea of what I just explained, I created a simple __flowchart__ concerning the logic of my entire Python code:
@@ -373,7 +373,7 @@ https://github.com/PerriAlessandro/Assignment1/blob/main/full_lap.mp4
 
 
 ### Possible improvements ###
-During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more complex one but with more lines of code. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time. This is actually quite simple to implement, but I decided against it because I took as my priority the ability to allow the robot to move through the maze regardless of the presence of silver tokens.
+During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more complex one but with more lines of code. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time. This is actually quite simple to implement, but I decided against it because I took as my priority the ability to allow the robot to move through the circuit regardless of the presence of silver tokens, as if the two tasks were implemented by two different _modules_.
 
 
 

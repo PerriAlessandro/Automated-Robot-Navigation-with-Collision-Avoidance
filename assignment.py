@@ -19,11 +19,11 @@ Methods:
 	- find_silver_token()
 	- grab_silver()
 	- find_obstacles(range_front,range_lat)
-	- drive_around(dist_left,dist_right,dist_front)
+	- drive_around(dist_front, dist_left,dist_right)
 	- main()
 
 How to run:
-	$python run.py assignment.py
+	$python2 run.py assignment.py
 
 """
 
@@ -170,12 +170,12 @@ def find_obstacles(range_front=30,range_lat=[80,100]):
 def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 	"""
 	Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the (frontal and lateral) 
-	distance values obtained by find_obstacles()
+	distance values of the golden tokens obtained by find_obstacles()
 	
 	Args:
 		dist_left (float): distance of the closest golden token on the left
 		dist_right (float): distance of the closest golden token on the right
-		dist_front (float): distance of the closest golden token in the frontal portion of plane(-1 if no golden token is detected)
+		dist_front (float): distance of the closest golden token in the frontal portion of plane
 		a_th_gld (float): threshold for the frontal golden token, default: 1.2
 	"""
 
