@@ -4,7 +4,7 @@
 This assignment is based on a simple, portable robot simulator developed by Student Robotics. 
 Aim of the project:
 The project aimed to write a Python script in which we had to manage the behaviour of the robot using this kind of logic:
-	- constrantly drive the robot around the circuit in the counter-clockwise direction
+	- constantly drive the robot around the circuit in the counter-clockwise direction
 	- avoid touching the golden boxes
 	- when the robot is close to a silver box, it should grab it, and move it behind itself
 
