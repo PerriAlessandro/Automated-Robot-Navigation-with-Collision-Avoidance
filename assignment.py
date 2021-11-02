@@ -3,7 +3,7 @@
 
 This assignment is based on a simple, portable robot simulator developed by Student Robotics. 
 Aim of the project:
-The project aimed to write a Python script  in which we had to manage the behaviour of the robot using this kind of logic:
+The project aimed to write a Python script in which we had to manage the behaviour of the robot using this kind of logic:
 	- constrantly drive the robot around the circuit in the counter-clockwise direction
 	- avoid touching the golden boxes
 	- when the robot is close to a silver box, it should grab it, and move it behind itself
@@ -40,12 +40,14 @@ a_th = 2.0
 d_th = 0.4
 """ float: Threshold for the control of the orientation"""
 
-silver = True
-""" boolean: variable for letting the robot know if it has to look for a silver or for a golden marker"""
-
 R = Robot()
 """ instance of the class Robot"""
 
+a_th_svr=1.0
+""" float: Threshold for the detection of the silver token (linear distance)"""
+
+d_th_svr=70 
+""" float: Threshold for the detection of the silver token (orientation)"""
 
 def drive(speed, seconds):
     """
@@ -123,7 +125,7 @@ def grab_silver():
 
 			else:
 			    print("Aww, I'm not close enough.")
-			    finished = False
+			    #finished = False
 	    	elif -a_th <= rot_y <= a_th:  # if the robot is well aligned with the token, we go forward
 		    print("Ah, that'll do.")
 		    drive(50, 0.5)
@@ -182,10 +184,10 @@ def find_lateral_token(range=[80,100]):
 	dist_left = np.mean((dist_l1, dist_l2))  #mean of the distances already explained before, mean() function from Numpy library
 	dist_right = np.mean((dist_r1, dist_r2))
 
-	return dist_left,dist_right
+	return dist_l1,dist_r1
 
 
-def drive_around(dist_left,dist_right,dist_front):
+def drive_around(dist_left,dist_right,dist_front,a_th_gld=1.2):
 	"""
 	Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
 	find_lateral_token() functions.
@@ -195,7 +197,7 @@ def drive_around(dist_left,dist_right,dist_front):
 		dist_right (float): mean distance of the two closest golden token on the right
 		dist_front (float): distance of the closest golden token in the frontal portion of plane(-1 if no golden token is detected)
 	"""
-	a_th_gld=1.2 #linear distance threshold of golden token
+	 #linear distance threshold of golden token
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
 			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
@@ -221,9 +223,7 @@ def drive_around(dist_left,dist_right,dist_front):
 
 def main():
 	counter_l=counter_r=c=0
-	a_th_svr=1.4 #linear distance threshold of silver token
-	d_th_svr=70 #orientation threshold of silver token
-
+	
 	while 1:
 		
 		#Updating information about the gold and silver tokens in the specified areas of the robot view (i.e. frontal and lateral for golden tokens, frontal for silver tokens)
@@ -236,6 +236,15 @@ def main():
 			grab_silver()	
 		else:
 			drive_around(dist_left_gld,dist_right_gld,dist_front_gld) #If the silver token is too far, then drive around!
+		c=c+1
+		print("C= "+str(c))	
+		
+		if(dist_left_gld==100):
+			counter_l=counter_l+1
+		if(dist_right_gld==100):
+			counter_r=counter_r+1
+		print("COUNTER L= "+str(counter_l)+", COUNTER R= "+str(counter_r))  	  	
+		print("---------------------------------------")   
 	
 			
 main()
@@ -243,16 +252,16 @@ main()
 
 
 
-	"""  	  	
-		c=c+1
-		print("C= "+str(c))	
-		print("DISTANCE= "+str(distance))
-		print("dist_right= "+str(mean_r))
-		print("dist_left= "+str(mean_l))
-		if(mean_l==100):
-			counter_l=counter_l+1
-		if(mean_r==100):
-			counter_r=counter_r+1
-		print("COUNTER L= "+str(counter_l)+", COUNTER R= "+str(counter_r))  	  	
-		print("---------------------------------------")   
-		"""
+"""  	  	
+	c=c+1
+	print("C= "+str(c))	
+	print("DISTANCE= "+str(distance))
+	print("dist_right= "+str(mean_r))
+	print("dist_left= "+str(mean_l))
+	if(mean_l==100):
+		counter_l=counter_l+1
+	if(mean_r==100):
+		counter_r=counter_r+1
+	print("COUNTER L= "+str(counter_l)+", COUNTER R= "+str(counter_r))  	  	
+	print("---------------------------------------")   
+	"""
