@@ -12,15 +12,13 @@ Imported Libraries:
 	-__future__
 	- time
 	- sr.robot
-	- numpy
 	
 Methods:
 	- turn(speed,seconds)
 	- drive(speed,seconds)
 	- find_silver_token()
 	- grab_silver()
-	- find_frontal_token(range)
-	- find_lateral_token(range)
+	- find_obstacles(range_front,range_lat)
 	- drive_around(dist_left,dist_right,dist_front)
 	- main()
 
@@ -32,7 +30,6 @@ How to run:
 from __future__ import print_function
 import time
 from sr.robot import *
-import numpy as np
 
 a_th = 2.0
 """ float: Threshold for the control of the linear distance"""
@@ -137,57 +134,37 @@ def grab_silver():
 		    turn(+2, 0.5)
 
 
-def find_frontal_token(range=30):
-    """
-    Function to find the closest golden token in a angle between the specified range(i.e. the frontal portion of the robot view).
-    
-    Args: 
-    	range (float): positive range in which we want to find the token, default: 30
-	
-    Returns:
-	dist (float): distance of the closest golden token in the specified range(-1 if no golden token is detected)
-    """
-    
-    dist =100
-    rot_y = -100   
-    for token in R.see():
-        if token.dist < dist and token.info.marker_type is MARKER_TOKEN_GOLD and -range < token.rot_y < +range:
-            dist = token.dist
-	    rot_y = token.rot_y
-    if dist == 100:
-     return -1
-    else:
-   	 return dist
-
-
-def find_lateral_token(range=[80,100]):
+def find_obstacles(range_front=30,range_lat=[80,100]):
 
 	"""
 	Function to find the mean of the distances of the two closest golden token on the left and the right portions of the robot view.
 	Args:
-		range (int[]):list of the two positive angles in which the robot will search for, default [80,100] degrees
+		range_front (float): positive range in which we want to find the frontal token, default: 30 degrees
+		range_lat (int[]):list of the two positive angles (that correspond to the lateral areas) in which the robot will search for, default [80,100] degrees
 	Returns:
-		dist_left (float): mean distance of the two closest golden token on the left
-		dist_right (float): mean distance of the two closest golden token on the right
+		dist_front (float): distance of the closest golden token on the front
+		dist_left (float): distance of the closest golden token on the left
+		dist_right (float): distance of the closest golden token on the right
 	"""
     
-	dist_l1 = dist_l2 = dist_r1 =dist_r2= 100
+	dist_left=dist_right=dist_front= 100
 
 	for token in R.see():
 		if(token.info.marker_type is MARKER_TOKEN_GOLD and token.dist < 2.5):
-			if token.dist < dist_l1 and -range[1] < token.rot_y < -range[0] :
-			    dist_l1 = token.dist
-			    dist_l2 = dist_l1
-			if token.dist < dist_r1 and range[0] < token.rot_y < range[1] :
-			    dist_r1 = token.dist
-			    dist_r2 = dist_r1
-	dist_left = np.mean((dist_l1, dist_l2))  #mean of the distances already explained before, mean() function from Numpy library
-	dist_right = np.mean((dist_r1, dist_r2))
+		
+			if token.dist < dist_front and -range_front < token.rot_y < +range_front:
+			    dist_front=token.dist
+			if token.dist < dist_left and -range_lat[1] < token.rot_y < -range_lat[0] :
+			    dist_left = token.dist
+			 
+			if token.dist < dist_right and range_lat[0] < token.rot_y < range_lat[1] :
+			    dist_right = token.dist
+			
+			
+	return dist_front,dist_left,dist_right
 
-	return dist_l1,dist_r1
 
-
-def drive_around(dist_left,dist_right,dist_front,a_th_gld=1.2):
+def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 	"""
 	Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
 	find_lateral_token() functions.
@@ -200,22 +177,15 @@ def drive_around(dist_left,dist_right,dist_front,a_th_gld=1.2):
 	 #linear distance threshold of golden token
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
-			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
-		    		turn(45,0.1)	
-		    		print("right a bit...")
-		    		#print("right a bit because left= "+str(mean_l)+" and right= "+str(mean_r)) 		
-			else:	 		#the two lateral distances are too similar, better to go forward while turning
-		    		drive(20,0.1)
-				turn(20,0.1)
-				print("slightly turn to the right...")	
-		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that mean_r<mean_l
+	    		drive(20,0.1)
+			turn(20,0.1)
+			print("slightly turn to the right...")	
+		
+		else: #if the cycle arrives here, it means that dist_right<dist_left
 		    	print("left a bit...")
 		    	#print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
 		   	turn(-45,0.1)
-		else:
-			drive(20,0.1)
-			turn(-35,0.1)
-			print("slightly turn to the left...")		  	
+		  	
 	else:				#if none of the previous conditions occured, then go forward
 		drive(80,0.15)
 		print("going forward...")   	
@@ -228,14 +198,17 @@ def main():
 		
 		#Updating information about the gold and silver tokens in the specified areas of the robot view (i.e. frontal and lateral for golden tokens, frontal for silver tokens)
 		dist_svr, rot_y_svr= find_silver_token()
-		dist_front_gld= find_frontal_token()
-		dist_left_gld,dist_right_gld= find_lateral_token()
+		dist_front_gld,dist_left_gld,dist_right_gld= find_obstacles()
 		
 		#If the distance of the silver token (dist) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
 		if(dist_svr<a_th_svr and dist_svr!=-1 and rot_y_svr>-d_th_svr and rot_y_svr<d_th_svr):
 			grab_silver()	
 		else:
-			drive_around(dist_left_gld,dist_right_gld,dist_front_gld) #If the silver token is too far, then drive around!
+			drive_around(dist_front_gld,dist_left_gld,dist_right_gld) #If the silver token is too far, then drive around!
+		
+		
+		
+		
 		c=c+1
 		print("C= "+str(c))	
 		
