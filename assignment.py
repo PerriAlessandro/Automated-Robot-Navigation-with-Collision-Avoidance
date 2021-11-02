@@ -181,28 +181,18 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
 		
-		"""
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
-			turn(20,0.1)
-			print("right a bit...")	
-		
-		else: #if the cycle arrives here, it means that dist_right<dist_left
-		    	print("left a bit...")
-		    	#print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
-		   	turn(-45,0.1)
-		"""
-		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
-			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
+			if(1.5*dist_left<dist_right): #in this case the the left distance (dist_left) is at least 1.5 times smaller than the right distance (dist_right), so i only need to turn to the right 
 		    		turn(45,0.1)	
 		    		print("right a bit...")
-		    		#print("right a bit because left= "+str(mean_l)+" and right= "+str(mean_r)) 		
+		    		#print("right a bit because left= "+str(dist_left)+" and right= "+str(dist_right)) 		
 			else:	 		#the two lateral distances are too similar, better to go forward while turning
 		    		drive(20,0.1)
 				turn(20,0.1)
 				print("slightly turn to the right...")	
-		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that mean_r<mean_l
+		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that dist_right<dist_left
 		    	print("left a bit...")
-		    	#print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
+		    	#print("left a bit because left= "+str(dist_left)+" and right= "+str(dist_right))
 		   	turn(-45,0.1)
 		else:
 			drive(20,0.1)

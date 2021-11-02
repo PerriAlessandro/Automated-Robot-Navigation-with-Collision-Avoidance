@@ -303,16 +303,15 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
 		
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
-			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
+			if(1.5*dist_left<dist_right): #in this case the the left distance (dist_left) is at least 1.5 times smaller than the right distance (dist_right), so i only need to turn to the right 
 		    		turn(45,0.1)	
 		    		print("right a bit...")	
 			else:	 		#the two lateral distances are too similar, better to go forward while turning
 		    		drive(20,0.1)
 				turn(20,0.1)
 				print("slightly turn to the right...")	
-		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that mean_r<mean_l
+		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that dist_right<dist_left
 		    	print("left a bit...")
-		    	#print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
 		   	turn(-45,0.1)
 		else:
 			drive(20,0.1)
@@ -328,7 +327,7 @@ main () function
 ----------------------
 The `main()` function is pretty simple and synthetic.
 
-There is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `drive_around()` one. The _if statement_ checks if the distance of the silver token (dist svr) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr). The robot will only see the silver tokens that are in the blue portion of the plane illustrated [here (Robot's Field of view section)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_obstacles).
+There is an endless loop cycle (_while 1_) in which data are updated and used to tell the robot what to do in that specific moment by using an _if statement_ that will call `grab_silver()` function or `drive_around()` one. The _if statement_ checks if the distance of the silver token (dist svr) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr). The robot will only see the silver tokens that are in the blue portion of the plane illustrated in the "Robot's Field of view" section of [`find_obstacles()`](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_obstaclesrange_front-range_lat).
 ```python
 def main():
 		
