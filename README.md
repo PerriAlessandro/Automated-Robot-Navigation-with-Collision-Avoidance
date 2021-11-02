@@ -128,8 +128,7 @@ Here's a list of all the functions in __assignment.py__ code:
 - [turn(speed,seconds)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turnspeedseconds)
 - [find_silver_token()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_silver_token)
 - [grab_silver()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_silver)
-- [find_frontal_token(range)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_frontal_tokenrange)
-- [find_lateral_token(range)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_lateral_tokenrange)
+- [find_obstacles(range_front, range_lat)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_obstaclesrange_frontrange_lat)
 - [drive_around(dist_left,dist_right,dist_front)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#drive_arounddist_leftdist_rightdist_front)
 
 
@@ -217,14 +216,17 @@ def grab_silver():
 			grab=R.grab()
 			if grab:  # if we grab the token, we move the robot forward and on the right, we release the token, and we go back to the initial position
 			    print("Gotcha!")
+			    print("turning..")
 		    	    turn(23, 3) #turn (+180 degrees)
+		    	    print("releasing..")
 			    R.release()
+			    print("turning again..")
 			    turn(-23, 3) #turn (-180 degrees)
+			    print("Ok, my work is done!")
 			    finished = True
 
 			else:
 			    print("Aww, I'm not close enough.")
-			    finished = False
 	    	elif -a_th <= rot_y <= a_th:  # if the robot is well aligned with the token, we go forward
 		    print("Ah, that'll do.")
 		    drive(50, 0.5)

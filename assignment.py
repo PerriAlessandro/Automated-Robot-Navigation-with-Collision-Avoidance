@@ -40,7 +40,7 @@ d_th = 0.4
 R = Robot()
 """ instance of the class Robot"""
 
-a_th_svr=1.0
+a_th_svr=1.2
 """ float: Threshold for the detection of the silver token (linear distance)"""
 
 d_th_svr=70 
@@ -115,14 +115,17 @@ def grab_silver():
 			grab=R.grab()
 			if grab:  # if we grab the token, we move the robot forward and on the right, we release the token, and we go back to the initial position
 			    print("Gotcha!")
+			    print("turning..")
 		    	    turn(23, 3) #turn (+180 degrees)
+		    	    print("releasing..")
 			    R.release()
+			    print("turning again..")
 			    turn(-23, 3) #turn (-180 degrees)
+			    print("Ok, my work is done!")
 			    finished = True
 
 			else:
 			    print("Aww, I'm not close enough.")
-			    #finished = False
 	    	elif -a_th <= rot_y <= a_th:  # if the robot is well aligned with the token, we go forward
 		    print("Ah, that'll do.")
 		    drive(50, 0.5)
@@ -137,10 +140,10 @@ def grab_silver():
 def find_obstacles(range_front=30,range_lat=[80,100]):
 
 	"""
-	Function to find the mean of the distances of the two closest golden token on the left and the right portions of the robot view.
+	Function to find the mean of the distances of the closest golden token (i.e. of the obstacles) on the frontal, the left and the right portions of the robot view.
 	Args:
 		range_front (float): positive range in which we want to find the frontal token, default: 30 degrees
-		range_lat (int[]):list of the two positive angles (that correspond to the lateral areas) in which the robot will search for, default [80,100] degrees
+		range_lat (int[]):list of the two positive angles (that correspond to the lateral areas) in which the robot will search for, default: [80,100] degrees
 	Returns:
 		dist_front (float): distance of the closest golden token on the front
 		dist_left (float): distance of the closest golden token on the left
@@ -166,26 +169,45 @@ def find_obstacles(range_front=30,range_lat=[80,100]):
 
 def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 	"""
-	Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
-	find_lateral_token() functions.
+	Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the (frontal and lateral) 
+	distance values obtained by find_obstacles()
 	
 	Args:
-		dist_left (float): mean distance of the two closest golden token on the left
-		dist_right (float): mean distance of the two closest golden token on the right
+		dist_left (float): distance of the closest golden token on the left
+		dist_right (float): distance of the closest golden token on the right
 		dist_front (float): distance of the closest golden token in the frontal portion of plane(-1 if no golden token is detected)
+		a_th_gld (float): threshold for the frontal golden token, default: 1.2
 	"""
-	 #linear distance threshold of golden token
+
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
+		
+		"""
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
-	    		drive(20,0.1)
 			turn(20,0.1)
-			print("slightly turn to the right...")	
+			print("right a bit...")	
 		
 		else: #if the cycle arrives here, it means that dist_right<dist_left
 		    	print("left a bit...")
 		    	#print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
 		   	turn(-45,0.1)
-		  	
+		"""
+		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
+			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
+		    		turn(45,0.1)	
+		    		print("right a bit...")
+		    		#print("right a bit because left= "+str(mean_l)+" and right= "+str(mean_r)) 		
+			else:	 		#the two lateral distances are too similar, better to go forward while turning
+		    		drive(20,0.1)
+				turn(20,0.1)
+				print("slightly turn to the right...")	
+		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that mean_r<mean_l
+		    	print("left a bit...")
+		    	#print("left a bit because left= "+str(mean_l)+" and right= "+str(mean_r))
+		   	turn(-45,0.1)
+		else:
+			drive(20,0.1)
+			turn(-35,0.1)
+			print("slightly turn to the left...")	
 	else:				#if none of the previous conditions occured, then go forward
 		drive(80,0.15)
 		print("going forward...")   	
