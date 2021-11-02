@@ -134,8 +134,8 @@ Here's a list of all the functions in __assignment.py__ code:
 - [turn(speed,seconds)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#turnspeedseconds)
 - [find_silver_token()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_silver_token)
 - [grab_silver()](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_silver)
-- [find_obstacles(range_front, range_lat)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_obstaclesrange_frontrange_lat)
-- [drive_around(dist_left,dist_right,dist_front)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#drive_arounddist_leftdist_rightdist_front)
+- [find_obstacles(range_front, range_lat)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#find_obstaclesrange_front-range_lat)
+- [drive_around(dist_left,dist_right,dist_front)](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#drive_arounddist_frontdist_left-dist_right)
 
 
 
@@ -286,8 +286,8 @@ def find_obstacles(range_front=30,range_lat=[80,100]):
 ```
 
 ### drive_around(dist_front,dist_left, dist_right) ###
-Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the distance values obtained by find_frontal_token() and
-	find_lateral_token() functions. This function is called whenever the conditions for grabbing a silver token (specified in the main()) are not respected.
+Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the (frontal and lateral) 
+	distance values of the golden tokens obtained by find_obstacles(). This function is called whenever the conditions for grabbing a silver token (specified in the main()) are not respected.
 - Arguments 
   - `dist_front` _(float)_: distance of the closest golden token on the front
   - `dist_left` _(float)_: distance of the closest golden token on the left
@@ -302,15 +302,6 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
 		
-		"""
-		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
-			turn(20,0.1)
-			print("right a bit...")	
-		
-		else: #if the cycle arrives here, it means that dist_right<dist_left
-		    	print("left a bit...")
-		   	turn(-45,0.1)
-		"""
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
 			if(1.5*dist_left<dist_right): #in this case the the left distance (mean_l) is at least 1.5 times smaller than the right distance (mean_r), so i only need to turn to the right 
 		    		turn(45,0.1)	
