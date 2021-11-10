@@ -19,12 +19,12 @@ The project aimed to write a Python script in which we had to manage the behavio
 
 Here's a short clip of the desired behavior I just described.
 <p align="center">
-	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/grab_token_gif.gif" height=320 width=256>
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/grab_token_gif.gif" height=320 width=256>
 </p>
 
 The hardest part of the assignment was to implement a logic with which the robot should be able to detect the walls made out of golden boxes and to avoid them by simply turning left or right, depending on the information about the distance and the orientation of the golden tokens close to it. As it'll be described better in the next paragraphs, my code is mainly based on the comparison between left and right golden token distances. In such a way, the robot will properly turn in the right direction, here's a GIF that shows the desired behavior:
 <p align="center">
-	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/corner_gif.gif" height=234 width=600>
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/corner_gif.gif" height=234 width=600>
 </p>
 
 
@@ -206,7 +206,7 @@ This function permits you to move forward to the closest silver token and grab i
   
   Here's a flowchart that illustrates the way of how `grab_silver()` works:
   
-![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/grab_silver_flowchart.png)
+![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/grab_silver_flowchart.png)
 - Code
 ```python
 def grab_silver():
@@ -259,7 +259,7 @@ Function to find the mean of the distances of the two closest golden token on th
 
 The robot will have this kind of field of view:
 <p align="center">
-	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/thresholds.jpg" height=465 width=640>
+	<img src="https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/thresholds.jpg" height=465 width=640>
 </p>
 
 	
@@ -347,9 +347,9 @@ def main():
 
 In order to have a more intuitive idea of what I just explained, I created a simple __flowchart__ concerning the logic of my entire Python code:
 
-![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/main_flowchart.png)
+![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/main_flowchart.png)
 
-In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program. You can also find the flowchart for the `grab_silver()` function [here](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_silver).
+In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program. You can also find the flowchart for the `grab_silver()` function [here](https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/README.md#grab_silver).
 
 Results
 ----------------------
@@ -359,7 +359,7 @@ Overall, I'm genuinely satisfied with the work I've done because it allowed me t
 
 I spent most of the time on the first part of the project because at a first sight I didn't know which could be the best way to make the robot take a decision. The first code I implemented was based on letting the robot avoid golden tokens by just checking the angle between them and the robot, but I had noticed that it couldn't have worked in a deterministic way because there were some moments in which the robot decided to turn on the wrong way and eventually go back instead of going on. Things started working better when I decided to base the main logic on comparing the distances between right and left tokens. 
 Here's a short video of the final result (sped up to 2x):
-https://github.com/PerriAlessandro/Assignment1/blob/main/full_lap.mp4
+https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/full_lap.mp4
 
 In the last days before the assignment deadline, I implemented a new version of the code in which I put `find_obstacles()` function inside `drive around()`, using inner functions. In this way it is no more necessary to update infos (about golden tokens) in `main()` but it is directly managed by `drive around()`, you can find [here] (https://github.com/PerriAlessandro/Assignment1/blob/main/extra/assignment_extra) the code.
 
