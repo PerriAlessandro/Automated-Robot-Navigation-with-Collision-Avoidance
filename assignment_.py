@@ -142,37 +142,10 @@ def grab_silver():
 		    turn(+2, 0.5)
 
 
-def find_obstacles(range_front=30,range_lat=[80,100]):
-
-	"""
-	Function to find the mean of the distances of the closest golden token (i.e. of the obstacles) on the frontal, the left and the right portions of the robot view.
-	Args:
-		range_front (float): positive range in which we want to find the frontal token, default: 30 degrees
-		range_lat (int[]):list of the two positive angles (that correspond to the lateral areas) in which the robot will search for, default: [80,100] degrees
-	Returns:
-		dist_front (float): distance of the closest golden token on the front
-		dist_left (float): distance of the closest golden token on the left
-		dist_right (float): distance of the closest golden token on the right
-	"""
-    
-	dist_left=dist_right=dist_front= 100
-
-	for token in R.see():
-		if(token.info.marker_type is MARKER_TOKEN_GOLD and token.dist < 2.5):
-		
-			if token.dist < dist_front and -range_front < token.rot_y < +range_front:
-			    dist_front=token.dist
-			if token.dist < dist_left and -range_lat[1] < token.rot_y < -range_lat[0] :
-			    dist_left = token.dist
-			 
-			if token.dist < dist_right and range_lat[0] < token.rot_y < range_lat[1] :
-			    dist_right = token.dist
-			
-			
-	return dist_front,dist_left,dist_right
 
 
-def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
+
+def drive_around(a_th_gld=1.2):
 	"""
 	Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the (frontal and lateral) 
 	distance values of the golden tokens obtained by find_obstacles()
@@ -182,8 +155,45 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 		dist_right (float): distance of the closest golden token on the right
 		dist_front (float): distance of the closest golden token in the frontal portion of plane
 		a_th_gld (float): threshold for the frontal golden token, default: 1.2
+	
+	Inner Functions:
+		find_obstacles(range_front,range_lat)	: see find_obstacles() function header
+		
+		
 	"""
+	
+	
+	def find_obstacles(range_front=30,range_lat=[80,100]):
 
+		"""
+		Function to find the mean of the distances of the closest golden token (i.e. of the obstacles) on the frontal, the left and the right portions of the robot view.
+		Args:
+			range_front (float): positive range in which we want to find the frontal token, default: 30 degrees
+			range_lat (int[]):list of the two positive angles (that correspond to the lateral areas) in which the robot will search for, default: [80,100] degrees
+		Returns:
+			dist_front (float): distance of the closest golden token on the front
+			dist_left (float): distance of the closest golden token on the left
+			dist_right (float): distance of the closest golden token on the right
+		"""
+		dist_left=dist_right=dist_front= 100
+
+		for token in R.see():
+			if(token.info.marker_type is MARKER_TOKEN_GOLD and token.dist < 2.5):
+			
+				if token.dist < dist_front and -range_front < token.rot_y < +range_front:
+				    dist_front=token.dist
+				if token.dist < dist_left and -range_lat[1] < token.rot_y < -range_lat[0] :
+				    dist_left = token.dist
+				 
+				if token.dist < dist_right and range_lat[0] < token.rot_y < range_lat[1] :
+				    dist_right = token.dist
+				
+				
+		return dist_front,dist_left,dist_right
+	
+	
+	dist_front,dist_left,dist_right=find_obstacles()
+	
 	if(dist_front<a_th_gld):	#check if the frontal distance is lower than a_th_gld	
 		
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
@@ -209,53 +219,20 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 	  	  	
 
 def main():
-	lap=counter_l=counter_r=c=0
+	tokens=0
 	
 	while 1:
-		print("Lap number: "+str(int(math.floor(lap/7))))
 		
-		
-		#Updating information about the gold and silver tokens in the specified areas of the robot view (i.e. frontal and lateral for golden tokens, frontal for silver tokens)
-		dist_svr, rot_y_svr= find_silver_token()
-		dist_front_gld,dist_left_gld,dist_right_gld= find_obstacles()
-		
+		dist_svr, rot_y_svr= find_silver_token()#Updating silver tokens distance and orientation infos
+
 		#If the distance of the silver token (dist) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
 		if(dist_svr<a_th_svr and dist_svr!=-1 and rot_y_svr>-d_th_svr and rot_y_svr<d_th_svr):
-			lap=lap+1
+			tokens=tokens+1
 			grab_silver()	
 		else:
-			dist_front_gld,dist_left_gld,dist_right_gld= find_obstacles()
-			drive_around(dist_front_gld,dist_left_gld,dist_right_gld) #If the silver token is too far, then drive around!
-		
-		
-		
-		
-		c=c+1
-		print("C= "+str(c))	
-		
-		if(dist_left_gld==100):
-			counter_l=counter_l+1
-		if(dist_right_gld==100):
-			counter_r=counter_r+1
-		print("COUNTER L= "+str(counter_l)+", COUNTER R= "+str(counter_r))  	  	
-		print("---------------------------------------")   
+			drive_around() #If the silver token is too far, then drive around!	
 	
-			
+		print("Lap number: "+str(int(math.floor(tokens/7))))	
+		print("---------------------------------------")  
 main()
 
-
-
-
-"""  	  	
-	c=c+1
-	print("C= "+str(c))	
-	print("DISTANCE= "+str(distance))
-	print("dist_right= "+str(mean_r))
-	print("dist_left= "+str(mean_l))
-	if(mean_l==100):
-		counter_l=counter_l+1
-	if(mean_r==100):
-		counter_r=counter_r+1
-	print("COUNTER L= "+str(counter_l)+", COUNTER R= "+str(counter_r))  	  	
-	print("---------------------------------------")   
-	"""
