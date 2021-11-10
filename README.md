@@ -119,9 +119,9 @@ $ python2 run.py assignment.py
 ```
 where __assignment.py__  is the Python code that I implemented in order to complete the assigned task and that will be described in the following paragraphs.
 
-Imported libraries
+Imported Modules
 ----------------------
-The Python libraries needed are:
+The Python modules needed are:
 - [print_function](https://www.python.org/dev/peps/pep-3105/) (from __future__)
 - [time](https://docs.python.org/3/library/time.html?highlight=time#module-time)
 - [sr.robot](https://studentrobotics.org/docs/programming/sr/)
@@ -361,7 +361,7 @@ I spent most of the time on the first part of the project because at a first sig
 Here's a short video of the final result (sped up to 2x):
 https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/full_lap.mp4
 
-In the last days before the assignment deadline, I implemented a new version of the code in which I put `find_obstacles()` function inside `drive around()`, using inner functions. In this way it is no more necessary to update infos (about golden tokens) in `main()` but it is directly managed by `drive around()`, you can find [here] (https://github.com/PerriAlessandro/Assignment1/blob/main/tree/extra) the code.
+In the last days before the assignment deadline, I implemented a new version of the code in which I put `find_obstacles()` function inside `drive around()`, using inner functions. In this way it is no more necessary to update infos (about golden tokens) in `main()` but it is directly managed by `drive around()`, you can find [here] (https://github.com/PerriAlessandro/Assignment1/tree/main/extra) the code.
 
 
 ### Personal comments & Possible improvements ###
