@@ -347,9 +347,9 @@ def main():
 
 In order to have a more intuitive idea of what I just explained, I created a simple __flowchart__ concerning the logic of my entire Python code:
 
-![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/main_flowchart.png)
+![immagine](https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/main_flowchart.jpeg)
 
-In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program. You can also find the flowchart for the `grab_silver()` function [here](https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/README.md#grab_silver).
+In this way, it's possible to understand my work clearly and concisely. Moreover, I specified which function is called in each significative block (i.e. the writings in yellow) so that you can see how my code works point by point during the execution of the program. You can also find the flowchart for the `grab_silver()` function [here](https://github.com/PerriAlessandro/Assignment1/blob/main/README.md#grab_silver).
 
 Results
 ----------------------
@@ -361,7 +361,7 @@ I spent most of the time on the first part of the project because at a first sig
 Here's a short video of the final result (sped up to 2x):
 https://github.com/PerriAlessandro/Assignment1/blob/main/images%20and%20videos/full_lap.mp4
 
-In the last days before the assignment deadline, I implemented a new version of the code in which I put `find_obstacles()` function inside `drive around()`, using inner functions. In this way it is no more necessary to update infos (about golden tokens) in `main()` but it is directly managed by `drive around()`, you can find [here] (https://github.com/PerriAlessandro/Assignment1/blob/main/extra/assignment_extra) the code.
+In the last days before the assignment deadline, I implemented a new version of the code in which I put `find_obstacles()` function inside `drive around()`, using inner functions. In this way it is no more necessary to update infos (about golden tokens) in `main()` but it is directly managed by `drive around()`, you can find [here] (https://github.com/PerriAlessandro/Assignment1/blob/main/extra/assignment_extra.py) the code.
 
 
 ### Personal comments & Possible improvements ###
