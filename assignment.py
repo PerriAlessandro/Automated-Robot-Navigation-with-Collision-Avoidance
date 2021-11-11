@@ -133,8 +133,8 @@ def grab_silver():
 
 			else:
 			   print("Aww, I'm not close enough.")
-			   drive(-10,1)
-			   turn(10,2)
+			   drive(-10,1) #totally random movement to avoid grab() fails
+			   turn(10,2) #totally random movement to avoid grab() fails
 	    	elif -a_th <= rot_y <= a_th:  # if the robot is well aligned with the token, we go forward
 		    print("Ah, that'll do.")
 		    drive(50, 0.5)
@@ -219,10 +219,10 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 ##############################################################################################################
 
 def main():
-	lap=0;
+	tokens=0;
 	
 	while 1:
-		print("Lap number: "+str(int(math.floor(lap/7)))) #counts the number of laps, just for fun
+		print("Lap number: "+str(int(math.floor(tokens/7)))) #counts the number of laps, just for fun
 		
 		
 		#Updating information about the gold and silver tokens in the specified areas of the robot view (i.e. frontal and lateral for golden tokens, frontal for silver tokens)

@@ -233,8 +233,8 @@ def grab_silver():
 
 			else:
 			   print("Aww, I'm not close enough.")
-			   drive(-10,1)
-			   turn(10,2)
+			   drive(-10,1) #totally random movement to avoid grab() fails
+			   turn(10,2) #totally random movement to avoid grab() fails
 	    	elif -a_th <= rot_y <= a_th:  # if the robot is well aligned with the token, we go forward
 		    print("Ah, that'll do.")
 		    drive(50, 0.5)

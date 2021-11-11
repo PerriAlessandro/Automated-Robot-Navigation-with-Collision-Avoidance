@@ -47,7 +47,7 @@ a_th_svr=1.2
 d_th_svr=70 
 """ float: Threshold for the detection of the silver token (orientation)"""
 
-
+##############################################################
 
 def drive(speed, seconds):
     """
@@ -62,6 +62,7 @@ def drive(speed, seconds):
     R.motors[0].m0.power = 0
     R.motors[0].m1.power = 0
 
+##############################################################
 
 def turn(speed, seconds):
     """
@@ -75,6 +76,8 @@ def turn(speed, seconds):
     time.sleep(seconds)
     R.motors[0].m0.power = 0
     R.motors[0].m1.power = 0
+
+##############################################################
 
 
 def find_silver_token():
@@ -129,8 +132,8 @@ def grab_silver():
 
 			else:
 			   print("Aww, I'm not close enough.")
-			   drive(-10,1)
-			   turn(10,2)
+			   drive(-10,1) #totally random movement to avoid grab() fails
+			   turn(10,2) #totally random movement to avoid grab() fails
 	    	elif -a_th <= rot_y <= a_th:  # if the robot is well aligned with the token, we go forward
 		    print("Ah, that'll do.")
 		    drive(50, 0.5)
@@ -143,8 +146,8 @@ def grab_silver():
 
 
 
-
-
+##############################################################
+ 
 def drive_around(a_th_gld=1.2):
 	"""
 	Function that implements the logic with which the robot will decide to navigate in 2D space, it is essentially based on the (frontal and lateral) 
@@ -216,7 +219,8 @@ def drive_around(a_th_gld=1.2):
 	else:				#if none of the previous conditions occured, then go forward
 		drive(80,0.15)
 		print("going forward...")   	
-	  	  	
+
+##############################################################	  	  	
 
 def main():
 	tokens=0
