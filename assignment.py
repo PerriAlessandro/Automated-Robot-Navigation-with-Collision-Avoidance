@@ -112,7 +112,7 @@ def grab_silver():
 	"""
 	print("SILVER TOKEN DETECTED! LET'S GRAB IT..")
 	finished = False # bool: finished is false until the silver token is released and the robot is turned back to his initial position
-	while(not finished):
+	while(True):
 		dist, rot_y = find_silver_token() #retrieving information to manage the process
 		if dist == -1:  # if no token is detected, we make the robot turn
 			print("I don't see any token!!")
@@ -129,8 +129,8 @@ def grab_silver():
 			    print("turning again..")
 			    turn(-23, 3) #turn (-180 degrees)
 			    print("Ok, my work is done!")
-			    finished = True
-
+			    #finished = True
+			    return True
 			else:
 			   print("Aww, I'm not close enough.")
 			   drive(-10,1) #totally random movement to avoid grab() fails
@@ -231,7 +231,7 @@ def main():
 		
 		#If the distance of the silver token (dist) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
 		if(dist_svr<a_th_svr and dist_svr!=-1 and rot_y_svr>-d_th_svr and rot_y_svr<d_th_svr):
-			lap=lap+1
+			tokens=tokens+1
 			grab_silver()	
 		else:
 			drive_around(dist_front_gld,dist_left_gld,dist_right_gld) #If the silver token is too far, then drive around!
