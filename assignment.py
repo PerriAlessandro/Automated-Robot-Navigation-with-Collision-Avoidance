@@ -8,7 +8,7 @@ The project aimed to write a Python script in which we had to manage the behavio
 	- avoid touching the golden boxes
 	- when the robot is close to a silver box, it should grab it, and move it behind itself
 
-Imported Libraries:
+Imported Modules:
 	-__future__
 	- time
 	- sr.robot
@@ -48,6 +48,7 @@ d_th_svr=70
 """ float: Threshold for the detection of the silver token (orientation)"""
 
 
+##############################################################################################################
 
 def drive(speed, seconds):
     """
@@ -62,6 +63,7 @@ def drive(speed, seconds):
     R.motors[0].m0.power = 0
     R.motors[0].m1.power = 0
 
+##############################################################################################################
 
 def turn(speed, seconds):
     """
@@ -76,6 +78,7 @@ def turn(speed, seconds):
     R.motors[0].m0.power = 0
     R.motors[0].m1.power = 0
 
+##############################################################################################################
 
 def find_silver_token():
     """
@@ -95,6 +98,7 @@ def find_silver_token():
     else:
     	return dist, rot_y
 
+##############################################################################################################
 
 def grab_silver():
 	"""
@@ -142,6 +146,8 @@ def grab_silver():
 		    turn(+2, 0.5)
 
 
+##############################################################################################################
+
 def find_obstacles(range_front=30,range_lat=[80,100]):
 
 	"""
@@ -171,6 +177,8 @@ def find_obstacles(range_front=30,range_lat=[80,100]):
 			
 	return dist_front,dist_left,dist_right
 
+
+##############################################################################################################
 
 def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 	"""
@@ -208,54 +216,28 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 		print("going forward...")   	
 	  	  	
 
+##############################################################################################################
+
 def main():
-	lap=counter_l=counter_r=c=0
+	lap=0;
 	
 	while 1:
-		print("Lap number: "+str(int(math.floor(lap/7))))
+		print("Lap number: "+str(int(math.floor(lap/7)))) #counts the number of laps, just for fun
 		
 		
 		#Updating information about the gold and silver tokens in the specified areas of the robot view (i.e. frontal and lateral for golden tokens, frontal for silver tokens)
 		dist_svr, rot_y_svr= find_silver_token()
-		dist_front_gld,dist_left_gld,dist_right_gld= find_obstacles()
+		dist_front_gld,dist_left_gld,dist_right_gld= find_obstacles() #notice that i could have put this line in the else statement
 		
 		#If the distance of the silver token (dist) is lower than the specified threshold (a_th_svr) and within the range of (+- d_th_svr), then grab_silver()
 		if(dist_svr<a_th_svr and dist_svr!=-1 and rot_y_svr>-d_th_svr and rot_y_svr<d_th_svr):
 			lap=lap+1
 			grab_silver()	
 		else:
-			dist_front_gld,dist_left_gld,dist_right_gld= find_obstacles()
 			drive_around(dist_front_gld,dist_left_gld,dist_right_gld) #If the silver token is too far, then drive around!
-		
-		
-		
-		
-		c=c+1
-		print("C= "+str(c))	
-		
-		if(dist_left_gld==100):
-			counter_l=counter_l+1
-		if(dist_right_gld==100):
-			counter_r=counter_r+1
-		print("COUNTER L= "+str(counter_l)+", COUNTER R= "+str(counter_r))  	  	
+			  	
 		print("---------------------------------------")   
 	
 			
 main()
 
-
-
-
-"""  	  	
-	c=c+1
-	print("C= "+str(c))	
-	print("DISTANCE= "+str(distance))
-	print("dist_right= "+str(mean_r))
-	print("dist_left= "+str(mean_l))
-	if(mean_l==100):
-		counter_l=counter_l+1
-	if(mean_r==100):
-		counter_r=counter_r+1
-	print("COUNTER L= "+str(counter_l)+", COUNTER R= "+str(counter_r))  	  	
-	print("---------------------------------------")   
-	"""
