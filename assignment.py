@@ -111,7 +111,6 @@ def grab_silver():
 		None
 	"""
 	print("SILVER TOKEN DETECTED! LET'S GRAB IT..")
-	finished = False # bool: finished is false until the silver token is released and the robot is turned back to his initial position
 	while(True):
 		dist, rot_y = find_silver_token() #retrieving information to manage the process
 		if dist == -1:  # if no token is detected, we make the robot turn
@@ -129,7 +128,6 @@ def grab_silver():
 			    print("turning again..")
 			    turn(-23, 3) #turn (-180 degrees)
 			    print("Ok, my work is done!")
-			    #finished = True
 			    return True
 			else:
 			   print("Aww, I'm not close enough.")
@@ -197,15 +195,13 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 		if(dist_left<=dist_right): #checks if the distance of the left golden token is lower than the one of the right token 
 			if(1.5*dist_left<dist_right): #in this case the the left distance (dist_left) is at least 1.5 times smaller than the right distance (dist_right), so i only need to turn to the right 
 		    		turn(45,0.1)	
-		    		print("right a bit...")
-		    		#print("right a bit because left= "+str(dist_left)+" and right= "+str(dist_right)) 		
+		    		print("right a bit...")		
 			else:	 		#the two lateral distances are too similar, better to go forward while turning
 		    		drive(20,0.1)
 				turn(20,0.1)
 				print("slightly turn to the right...")	
 		elif(1.5*dist_right<dist_left): #if the cycle arrives here, it means that dist_right<dist_left
 		    	print("left a bit...")
-		    	#print("left a bit because left= "+str(dist_left)+" and right= "+str(dist_right))
 		   	turn(-45,0.1)
 		else:
 			drive(20,0.1)

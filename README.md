@@ -211,8 +211,7 @@ This function permits you to move forward to the closest silver token and grab i
 ```python
 def grab_silver():
 	print("SILVER TOKEN DETECTED! LET'S GRAB IT..")
-	finished = False # bool: finished is false until the silver token is released and the robot is turned back to his initial position
-	while(not finished):
+	while(True):
 		dist, rot_y = find_silver_token() #retrieving information to manage the process
 		if dist == -1:  # if no token is detected, we make the robot turn
 			print("I don't see any token!!")
@@ -229,7 +228,7 @@ def grab_silver():
 			    print("turning again..")
 			    turn(-23, 3) #turn (-180 degrees)
 			    print("Ok, my work is done!")
-			    finished = True
+			    return True
 
 			else:
 			   print("Aww, I'm not close enough.")
@@ -367,7 +366,7 @@ In the last days before the assignment deadline, I implemented a new version of 
 
 
 ### Personal comments & Possible improvements ###
-During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more intricated one. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time. This is actually quite simple to implement, but I decided against it because I took as my priority the ability to allow the robot to move through the circuit regardless of the presence of silver tokens, as if the two tasks were implemented by two stand-alone _modules_.
+During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more intricated one. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time. This is actually quite simple to implement, but I decided against it because I took as my priority the ability to allow the robot to move through the circuit regardless of the presence of silver tokens, just like if the two tasks were implemented by two stand-alone _modules_.
 
 
 

@@ -18,12 +18,11 @@ Methods:
 	- drive(speed,seconds)
 	- find_silver_token()
 	- grab_silver()
-	- find_obstacles(range_front,range_lat)
 	- drive_around(dist_front, dist_left,dist_right)
 	- main()
 
 How to run:
-	$python2 run.py assignment.py
+	$python2 run.py assignment_extra.py
 
 """
 
