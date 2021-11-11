@@ -18,12 +18,12 @@ Methods:
 	- drive(speed,seconds)
 	- find_silver_token()
 	- grab_silver()
-	- find_obstacles(range_front,range_lat)
 	- drive_around(dist_front, dist_left,dist_right)
 	- main()
 
 How to run:
-	$python2 run.py assignment.py
+	Move the file to the same folder of "run.py"
+	$python2 run.py assignment_extra.py
 
 """
 
@@ -220,7 +220,7 @@ def drive_around(a_th_gld=1.2):
 ##############################################################	  	  	
 
 def main():
-	tokens=0
+	tokens=0 #adds 1 everytime a silver token is grabbed 
 	
 	while 1:
 		

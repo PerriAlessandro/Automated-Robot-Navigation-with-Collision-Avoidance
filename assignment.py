@@ -215,7 +215,7 @@ def drive_around(dist_front,dist_left,dist_right,a_th_gld=1.2):
 ##############################################################################################################
 
 def main():
-	tokens=0;
+	tokens=0; #adds 1 everytime a silver token is grabbed 
 	
 	while 1:
 		print("Lap number: "+str(int(math.floor(tokens/7)))) #counts the number of laps, just for fun
