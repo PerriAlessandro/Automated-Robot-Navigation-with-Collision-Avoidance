@@ -366,7 +366,7 @@ In the last days before the assignment deadline, I implemented a new version of 
 
 
 ### Personal comments & Possible improvements ###
-During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more intricated one. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time. This is actually quite simple to implement, but I decided against it because I took as my priority the ability to allow the robot to move through the circuit regardless of the presence of silver tokens, just like if the two tasks were implemented by two stand-alone _modules_.
+During the whole time spent implementing the code, I preferred focusing more on developing a conceptually simple code rather than a more intricated one. However, there are several ways to improve the work done, one of them is letting the robot make decisions about where to turn in the proximity of a wall using silver tokens info about relative orientation. In this way, the robot could be able to turn itself and point directly to the token rather than just going on and searching for the silver token at a later time. This is actually quite simple to implement, but I decided against it because I took as my priority the ability to allow the robot to move through the circuit regardless of the presence of silver tokens, just like if the two tasks were implemented by two different _nodes_.
 
 
 
